@@ -187,3 +187,35 @@ await networkBase.SendRequest(requestInfo);
 - **Automatic Refresh**: 
   If a request encounters an expired token error, `NetworkBase` will attempt to refresh the token and retry the request. Manual handling of token refreshing is not required.
 
+## NetworkCore: Centralized Service Management
+
+In the ZeMind Unity Network Layer, the `NetworkCore` class is designed to manage and provide access to network services such as the `AuthorizationService`. Here’s how it works and how you can use it:
+
+### Centralized Service Management
+
+The `NetworkCore` class holds references to the various network services. This approach centralizes the initialization and management of these services, making it easier to handle them consistently throughout your application.
+
+### Accessing Services
+
+You can access network services via the `NetworkCore` class. For instance, to perform authorization, you can call:
+
+```csharp
+NetworkCore.AuthorizationService.Authorize(AuthenticationType.Credentials, new AuthorizationInfo()
+{
+    Type = AuthenticationType.Signin,
+    Parameters = _credentialsData,
+    OnDone = OnAuthorizationDone,
+    OnProgressChanged = OnProgressChanged
+});
+```
+
+
+### Service Initialization
+
+All network services, including `AuthorizationService`, will be initialized within the `NetworkCore` class. This setup ensures that you have a single point of reference for managing these services, which simplifies your code and improves maintainability.
+
+### Static Methods and Common Manager
+
+Since the services do not need to retain references beyond their immediate use and only rely on callbacks, the methods can be static. The `NetworkCore` class acts as a common manager, holding references to the service instances and providing access to them in a centralized manner.
+
+This design ensures that service instances are properly managed and accessed without requiring individual classes to handle their own service references.
